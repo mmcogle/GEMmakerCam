@@ -200,7 +200,7 @@ if ( params.input.hisat2.enabled == false && params.output.publish_raw == false 
  * and maps SRA runs to SRA experiments.
  */
 process retrieve_sra_metadata {
-  publishDir params.output.dir, mode: params.output.publish_mode, pattern: "*.GEMmaker.meta.*", saveAs: { "${it.tokenize(".")[0]}/${it}" }
+  /*publishDir params.output.dir, mode: params.output.publish_mode, pattern: "*.GEMmaker.meta.*", saveAs: { "${it.tokenize(".")[0]}/${it}" }
   label "python3"
 
   input:
@@ -213,7 +213,7 @@ process retrieve_sra_metadata {
   script:
     """
     retrieve_sra_metadata.py ${srr_file}
-    """
+    """*/
 }
 
 
