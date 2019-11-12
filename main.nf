@@ -274,7 +274,7 @@ if ( params.software.alignment != 0 && params.output.publish_raw == false && par
  * and maps SRA runs to SRA experiments.
  */
 process retrieve_sra_metadata {
-  /*publishDir params.output.dir, mode: params.output.publish_mode, pattern: "*.GEMmaker.meta.*", saveAs: { "${it.tokenize(".")[0]}/${it}" }
+  publishDir params.output.dir, mode: params.output.publish_mode, pattern: "*.GEMmaker.meta.*", saveAs: { "${it.tokenize(".")[0]}/${it}" }
   label "python3"
 
   input:
@@ -287,7 +287,7 @@ process retrieve_sra_metadata {
   script:
     """
     retrieve_sra_metadata.py ${srr_file}
-    """*/
+    """
 }
 
 
@@ -605,7 +605,7 @@ process next_sample {
  * Downloads SRA files from NCBI using the SRA Toolkit.
  */
 process download_runs {
-  /*tag { sample_id }
+  tag { sample_id }
   label "sratoolkit"
 
   input:
@@ -619,7 +619,7 @@ process download_runs {
   """
     ids=`echo $run_ids | perl -p -e 's/[\\[,\\]]//g' | perl -p -e 's/\\s*\$//' | perl -p -e 's/\\s+/,/g'`
     retrieve_sra.py \$ids
-  """*/
+  """
 }
 
 
