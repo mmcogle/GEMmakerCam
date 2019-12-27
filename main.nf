@@ -161,6 +161,22 @@ FASTA_ADAPTER = Channel.fromPath("${params.software.trimmomatic.clip_path}").col
 GTF_FILE = Channel.fromPath("${params.input.reference_dir}/${params.input.hisat2.gtf_file}").collect()
 
 
+/*Pull data from NDN*/
+if(params.input.type_data_pull == "ndn"){
+  Channel.fromPath("${params.input.input_data_dir}/${params.input.test_sample_list}").set { TEST_FILE }
+}
+
+process ndn_pull_data{
+
+  input:
+  file test_file from TEST_FILE
+
+  script:
+  """
+  ndn_pull.py ${test_file}
+  """
+
+}
 
 /**
  * Local Sample Input.FASTA_ADAPTER
