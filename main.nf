@@ -160,13 +160,14 @@ SALMON_INDEXES = Channel.fromPath("${params.input.reference_dir}/${params.input.
 FASTA_ADAPTER = Channel.fromPath("${params.software.trimmomatic.clip_path}").collect()
 GTF_FILE = Channel.fromPath("${params.input.reference_dir}/${params.input.hisat2.gtf_file}").collect()
 
-
-/*Pull data from NDN*/
 if(params.input.type_data_pull == "ndn"){
   Channel.fromPath("${params.input.input_data_dir}/${params.input.test_sample_list}").set { TEST_FILE }
 }
 
+//Pull data from NDN
+
 process ndn_pull_data{
+  label "ndn"
 
   input:
   file test_file from TEST_FILE
@@ -283,7 +284,9 @@ if ( params.software.alignment != 0 && params.output.publish_raw == false && par
   error "Error: at least one output format (raw, tpm) must be enabled for kallisto / salmon"
 }
 
-
+if(params.input.type_data_pull == "ndn"){
+  Channel.fromPath("${params.input.input_data_dir}/${params.input.test_sample_list}").set { TEST_FILE }
+}
 
 /**
  * Retrieves metadata for all of the remote samples
@@ -619,8 +622,11 @@ process next_sample {
 
 /**
  * Downloads SRA files from NCBI using the SRA Toolkit.
+ file test_file from TEST_FILE
  */
+
 process download_runs {
+  
   tag { sample_id }
   label "sratoolkit"
 
