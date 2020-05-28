@@ -172,6 +172,10 @@ process ndn_pull_data{
   input:
   file test_file from TEST_FILE
 
+  // output:
+  //   file("*.fastq") into DOWNLOADED_FASTQ_FOR_MERGING_NDN
+    //set val(sample_id), file("*.fastq") into DOWNLOADED_FASTQ_FOR_CLEANING
+
   script:
   """
   ndn_pull.py ${test_file}
@@ -280,13 +284,7 @@ if ( params.software.alignment == 0 && params.output.publish_raw == false && par
   error "Error: at least one output format (raw, fpkm, tpm) must be enabled for hisat2"
 }
 
-if ( params.software.alignment != 0 && params.output.publish_raw == false && params.output.publish_tpm == false ) {
-  error "Error: at least one output format (raw, tpm) must be enabled for kallisto / salmon"
-}
 
-if(params.input.type_data_pull == "ndn"){
-  Channel.fromPath("${params.input.input_data_dir}/${params.input.test_sample_list}").set { TEST_FILE }
-}
 
 /**
  * Retrieves metadata for all of the remote samples
