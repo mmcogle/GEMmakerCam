@@ -178,6 +178,7 @@ process ndn_pull_data{
 
   script:
   """
+  /usr/local/bin/nfd -c /usr/local/etc/ndn/nfd.conf > /logs/nfd.log 2>&1 & /bin/bash
   ndn_pull.py ${test_file}
   """
 
