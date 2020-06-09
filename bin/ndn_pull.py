@@ -18,13 +18,11 @@ def add_route(nameSpace,route):
     print("Route Added")
 
 def get_from_ndn():
-    output_file = open("Homo_sapiens_1.fastq", "w+")
+    output_file = open("Homo_sapiens_1.gz", "w+")
     name = "/BIOLOGY/SRA/9605/9606/NaN/RNA-Seq/ILLUMINA/TRANSCRIPTOMIC/PAIRED/Kidney/PRJNA359795/SRP095950/SRX2458154/SRR5139395/SRR5139395_1"
     subprocess.call(["ndncatchunks",name], stdout=output_file)
     print("Downloaded file")
     
-   # subprocess.call(["fasterq-dump", "Arabidopsis.sra"])
-
 
 
 if __name__ == "__main__":
@@ -39,6 +37,7 @@ if __name__ == "__main__":
         add_route(nameSpace,route)
         get_from_ndn()
     except:
+        print("There was an error!")
         sys.exit(1)
     sys.exit(1)
     # parse command-line arguments
