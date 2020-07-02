@@ -164,26 +164,6 @@ if(params.input.type_data_pull == "ndn"){
   Channel.fromPath("${params.input.input_data_dir}/${params.input.test_sample_list}").set { TEST_FILE }
 }
 
-//Pull data from NDN
-
-process ndn_pull_data{
-  label "ndn"
-
-  input:
-  file test_file from TEST_FILE
-
-  // output:
-  //   file("*.fastq") into DOWNLOADED_FASTQ_FOR_MERGING_NDN
-    //set val(sample_id), file("*.fastq") into DOWNLOADED_FASTQ_FOR_CLEANING
-
-  script:
-  """
-  /usr/local/bin/nfd -c /usr/local/etc/ndn/nfd.conf > /logs/nfd.log 2>&1 & /bin/bash
-  ndn_pull.py ${test_file}
-  """
-
-}
-
 /**
  * Local Sample Input.FASTA_ADAPTER
  * This checks the folder that the user has given
@@ -647,7 +627,7 @@ process download_runs {
 
 /**
  * Extracts FASTQ files from downloaded SRA files.
- */
+ 
 process fastq_dump {
   publishDir params.output.dir, mode: params.output.publish_mode, pattern: publish_pattern_fastq_dump, saveAs: { "${sample_id}/${it}" }
   tag { sample_id }
@@ -666,8 +646,27 @@ process fastq_dump {
   files=`echo $sra_files | perl -p -e 's/[\\[,\\]]//g' | perl -p -e 's/\\s*\$//' | perl -p -e 's/\\s+/,/g'`
   sra2fastq.py \$files
   """
-}
+}*/
 
+//Pull data from NDN
+
+process ndn_pull_data{
+  label "ndn"
+
+  input:
+  file test_file from TEST_FILE
+
+  output:
+  file("*.fastq") into DOWNLOADED_FASTQ_FOR_MERGING_NDN
+  set val(sample_id), file("*.fastq") into DOWNLOADED_FASTQ_FOR_CLEANING
+
+  script:
+  """
+  /usr/local/bin/nfd -c /usr/local/etc/ndn/nfd.conf > /logs/nfd.log 2>&1 & /bin/bash
+  ndn_pull.py ${test_file}
+  """
+
+}
 
 
 /**
