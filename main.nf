@@ -657,8 +657,9 @@ process ndn_pull_data{
   file test_file from TEST_FILE
 
   output:
-  file("*.fastq") into DOWNLOADED_FASTQ_FOR_MERGING_NDN
+  file("*.fastq") into DOWNLOADED_FASTQ_FOR_MERGING
   set val(sample_id), file("*.fastq") into DOWNLOADED_FASTQ_FOR_CLEANING
+  set val(sample_id), val(1) into CLEAN_SRA_SIGNAL
 
   script:
   """
